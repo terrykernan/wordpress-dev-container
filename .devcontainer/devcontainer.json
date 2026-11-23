@@ -1,0 +1,58 @@
+{
+  "name": "WordPress Development Environment",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "wordpress",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {}
+  },
+  "forwardPorts": [8080, 8081, 3306],
+  "portsAttributes": {
+    "8080": {
+      "label": "WordPress",
+      "onAutoForward": "notify"
+    },
+    "8081": {
+      "label": "phpMyAdmin",
+      "onAutoForward": "notify"
+    },
+    "3306": {
+      "label": "MariaDB",
+      "onAutoForward": "ignore"
+    }
+  },
+
+	// Configure tool-specific properties.
+	"customizations": {
+        "vscode": {
+            "extensions": [
+                "anthropic.claude-code",
+                "bmewburn.vscode-intelephense-client",
+                "dbaeumer.vscode-eslint",
+                "devsense.composer-php-vscode",
+                "devsense.intelli-php-vscode",
+                "devsense.phptools-vscode",
+                "devsense.profiler-php-vscode",
+                "docker.docker",
+                "esbenp.prettier-vscode",
+                "humao.rest-client",
+                "mechatroner.rainbow-csv",
+                "ms-azuretools.vscode-containers",
+                "ms-vscode-remote.remote-containers",
+                "ms-vscode-remote.remote-wsl",
+                "qwtel.sqlite-viewer",
+                "redhat.vscode-commons",
+                "redhat.vscode-xml",
+                "xdebug.php-debug"
+            ]
+        }
+    },
+    "remoteEnv": {
+        "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
+        // "PATH": "${containerEnv:PATH}:/workspaces/internet-landing-page/.devcontainer/bin:/workspaces/internet-landing-page/ilp/vendor/bin:/workspaces/internet-landing-page/ilp/node_modules/.bin:/home/vscode/.config/composer/vendor/bin"
+    },
+    "mounts": [
+        "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.claude,target=/home/vscode/.claude,readonly"
+    ]
+}

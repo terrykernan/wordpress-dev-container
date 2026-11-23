@@ -1,0 +1,42 @@
+# redirect to s3 if the file does not exist on this server
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteCond %{REQUEST_URI} ^/(wp-content\/uploads/.*)$
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.*)$ https://s3-bucket-name.s3.eu-west-1.amazonaws.com/$1 [R=301,NC,L]
+</IfModule>
+
+
+# SGS XMLRPC Disable Service
+<Files xmlrpc.php>
+	order deny,allow
+	deny from all
+</Files>
+# SGS XMLRPC Disable Service END
+
+
+# BEGIN WordPress
+# The directives (lines) between "BEGIN WordPress" and "END WordPress" are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
+
+# SGO Unset Vary
+<IfModule mod_headers.c>
+  Header unset Vary
+</IfModule>
+# SGO Unset Vary END
+
+
+

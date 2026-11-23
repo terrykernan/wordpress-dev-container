@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Listen for Xdebug",
+      "type": "php",
+      "request": "launch",
+      "port": 9003,
+      // PHP runs these files from /var/www/html; you edit them in /workspace.
+      "pathMappings": {
+        "/var/www/html/wp-content": "${workspaceFolder}/wp-content",
+        "/var/www/html/wp-config.php": "${workspaceFolder}/wp-config.php"
+      }
+    }
+  ]
+}

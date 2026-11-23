@@ -1,0 +1,10 @@
+{
+    "files.watcherExclude": {
+        "**/wp-content/uploads/**": true,
+        "**/*.sql": true
+    },
+    "search.exclude": {
+        "**/wp-content/uploads/**": true,
+        "**/*.sql": true
+    }
+}

@@ -1,0 +1,58 @@
+services:
+  wordpress:
+    build:
+      context: .
+      dockerfile: wordpress.Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      # Your project: open in VS Code at /workspace
+      - ..:/workspace
+      # Only the site-specific parts go into the web root.
+      # WordPress core comes from the image (see wordpress.Dockerfile).
+      - ../wp-content:/var/www/html/wp-content
+      - ../wp-config.php:/var/www/html/wp-config.php
+      - ../.htaccess:/var/www/html/.htaccess
+      - ./php.ini:/usr/local/etc/php/conf.d/zz-php.ini
+      - ./xdebug.ini:/usr/local/etc/php/conf.d/zz-xdebug.ini
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "8080:80"
+
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./mysql.cnf:/etc/mysql/conf.d/zz-mysql.cnf
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "8081:80"
+
+volumes:
+  db-data:

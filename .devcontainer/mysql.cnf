@@ -1,0 +1,8 @@
+; Dev-only MariaDB tuning: favors speed over crash-durability.
+; Mounted into the db container at /etc/mysql/conf.d/.
+[mysqld]
+innodb_buffer_pool_size = 512M
+innodb_flush_log_at_trx_commit = 2
+innodb_flush_method = O_DIRECT
+sync_binlog = 0
+skip-name-resolve
